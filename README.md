@@ -14,3 +14,5 @@ Pour le visualiser vous aurez besoin d'un serveur en local (WAMP par exemple), o
 
 
 ###### l'affichage des popups
+
+<img width="670" alt="screenPopup" src="https://user-images.githubusercontent.com/77837966/114059617-d4efd000-9894-11eb-85d0-2e097bdaced6.png">
