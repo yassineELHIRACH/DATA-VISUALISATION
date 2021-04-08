@@ -1,0 +1,30 @@
+    
+    {% extends "layout.twig" %}
+
+
+    {% block content %}
+
+        <style>
+            .leaflet-popup-content-wrapper{
+                background-color: green;
+                color: #FFFFFF;
+                font-size: 1rem !important;
+                margin: 0;
+            }
+        </style>
+    
+    <!-- tout ce dont on a besoin pour creer une map : un div id=map + du js -->
+    <div id="map" >
+    </div>
+
+     
+
+    <!-- Création de la map -->
+     <script src="public/js/affichageMap.js"></script>
+    <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+            
+            
+    
+    {% endblock %}
+    
+

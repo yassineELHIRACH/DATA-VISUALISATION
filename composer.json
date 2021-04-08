@@ -1,0 +1,22 @@
+{
+    "name": "yass/HotelFinder",
+    "authors": [
+        {
+            "name": "Yassine EL HIRACH",
+            "email": "mbg69yass@live.fr"
+        },
+		{
+			"name": "sabri Abid",
+            "email": "sabriAbid@gmail.com"
+		}
+    ],
+    "autoload": {
+        "psr-4": {
+            "App\\":"app/"
+        }
+    },
+    "require": {
+        "slim/slim": "3.*",
+        "slim/twig-view": "^2.0"
+    }
+}

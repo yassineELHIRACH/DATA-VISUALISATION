@@ -1,0 +1,220 @@
+{% extends "layout.twig" %}
+
+{%  block content %}
+    <style>
+
+        #tableauR{
+            padding-top: 45px;
+        }
+
+        table{
+            border-collapse: collapse
+        }
+
+        td{
+            border: 1px solid black;
+            padding: 10px;
+        }
+        a#cRetour{
+            border-radius:3px;
+            padding:10px;
+            font-size:15px;
+            text-align:center;
+            color:#fff;
+            background:rgba(0, 0, 0, 0.25);
+            position:fixed;
+            right:20px;
+            opacity:1;
+            z-index:99999;
+            transition:all ease-in 0.2s;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            text-decoration: none;
+        }
+        a#cRetour:before{ content: "\25b2"; }
+        a#cRetour:hover{
+            background:rgba(0, 0, 0, 1);
+            transition:all ease-in 0.2s;
+        }
+        a#cRetour.cInvisible{
+            bottom:-35px;
+            opacity:0;
+            transition:all ease-in 0.5s;
+        }
+
+        a#cRetour.cVisible{
+            bottom:20px;
+            opacity:1;
+        }
+    </style>
+
+    <div><a id="cRetour" class="cInvisible" href="#"></a></div>
+
+  <div id="tableauR">
+      <table id = "tableR">
+          <tr>
+              <td class="nameR">Nom</td>
+              <td >Nombre d'avis</td>
+              <td>Specialité</td>
+              <td>Rang</td>
+              <td>Note</td>
+              <td>WIfi</td>
+              <td>Livraison</td>
+              <td>Prix moyen</td>
+              <td>Arrondissement</td>
+          </tr>
+      </table>
+  </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() { // boutton retour haut de page
+        window.onscroll = function(ev) {
+            document.getElementById("cRetour").className = (window.pageYOffset > 100) ? "cVisible" : "cInvisible";
+        };
+    });
+
+    {
+        str=""
+        readCsv(str);
+    }
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+    //barre de recherche
+    var searchTextField = document.getElementById("textSearch");
+    searchTextField.addEventListener("input", function () {
+        if (searchTextField.value.length === 0) {
+            resetFilter();
+        }
+    });
+    //boutton de recherche
+    var searchTextButton = document.getElementById("searchButton")
+    searchTextButton.addEventListener("click",function(){
+        filterSearch(searchTextField.value);
+    })
+
+    function resetFilter(){
+        window.scroll(0,0);
+        var table  = document.getElementById("tableR");
+        var numrow = table.rows.length;
+        for (var r = 0; r < numrow; r++) {
+            table.rows[r].style.background = "white";
+        }
+    }
+
+    function filterSearch(searchString){
+        resetFilter();
+
+        var table  = document.getElementById("tableR");
+        var compteuroccurence = 0;
+        var numrow = table.rows.length;
+        var motclef = accent_fold(searchString).toLowerCase();
+
+
+        if(motclef != 0){
+            for (var r = 0; r < numrow; r++) {
+                var motAtrouver = accent_fold(table.rows[r].cells[0].innerHTML).toLowerCase();
+                if(compareStr(motAtrouver,motclef) ){
+                   // table.rows[r].scrollIntoView(true);
+                    //table.rows[r].style.background = "yellow";
+
+                }else{
+                   return false;
+
+                }
+
+            }
+        }
+
+    }
+
+    function compareStr(mot1,mot2){ //voit si mot2 est contenue dans mot1
+        var arr2 = mot2.split(' ');
+        for(let i=0;i<arr2.length;i++){
+            if(mot1.includes(arr2[i])){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+    var t = document.getElementById("tableR");
+
+
+    //<button id="monBtn" class="btn"><img src="icone.png" alt="icone" style="position:relative; z-index:20; margin:0px;" /></button>
+    function readCsv(str) {
+        $.get('./restaurant_data_kaggles.csv', function (csvString) {
+
+            // Use PapaParse to convert string to array of objects
+            var data = Papa.parse(csvString, {header: true, dynamicTyping: true}).data;
+            for (let i = 1; i <= 3000; i++) {
+                var row = data[i]
+
+                var n = t.rows.length;
+                var ligne = t.insertRow(n);
+
+                var cell0 = ligne.insertCell(0);
+                var cell1 =ligne.insertCell(1);
+                var cell2 = ligne.insertCell(2);
+                var cell3 =ligne.insertCell(3);
+                var cell4 =ligne.insertCell(4);
+                var cell5 =ligne.insertCell(5);
+                var cell6 =ligne.insertCell(6);
+                var cell7 = ligne.insertCell(7);
+                var cell8 =ligne.insertCell(8);
+
+                cell0.innerHTML = row.Title;$(cell0).addClass("resto");
+                cell1.innerHTML = row.nbrAvis;$(cell1).addClass("resto");
+                cell2.innerHTML = row.specialite;$(cell2).addClass("resto");
+                cell3.innerHTML = row.ranking;$(cell3).addClass("resto");
+                cell4.innerHTML = row.overallRating;$(cell4).addClass("resto");
+                cell5.innerHTML = row.wifi;$(cell5).addClass("resto");
+                cell6.innerHTML = row.livraison;$(cell6).addClass("resto");
+                cell7.innerHTML = row.prix;$(cell7).addClass("resto");
+                cell8.innerHTML = row.district;$(cell8).addClass("resto");
+
+                var nomResto = "";
+                nomResto += accent_fold(row.Title);
+                var html = "";
+                html += "<button class='btn' data-toggle='tooltip' title='cliquez ici pour vous y rendre'";
+                html += 'onclick="itineraire(' + "' " + nomResto + " '" + ')"';
+                html += "><img src='public/img/homeIconBlue.png'  alt='icone' style='position:relative; z-index:20; margin:0px;height: 20px'/></button>";
+                ligne.insertCell(9).innerHTML = html;
+               // filterSearch(str);
+            }
+        })
+    }
+
+    function itineraire(motclef){
+        console.log(motclef);
+        var adresse = 'https://www.google.fr/maps/search/';
+        var lien  = adresse.concat('',motclef);
+        console.log(motclef);
+        window.open(lien, '_blank');
+    }
+
+    var accentMap = {
+        'á':'a', 'é':'e', 'í':'i','ó':'o','ú':'u', 'ä' : 'a', 'à' : 'a', 'è' : 'e', 'ï' : 'i', 'ô' : 'o', 'ö' : 'o', '\'' : ' ', '-' : ' '
+    };
+
+    // fonction qui permet d'enlever les caracteres speciaux qu'on voit dans accentMap au dessus
+    function accent_fold (s) {
+        if (!s) {
+            return '';
+        }
+        var ret = '';
+        for (var i = 0 ; i < s.length; i++) {
+            ret += accentMap[s.charAt(i)] || s.charAt(i);
+        }
+        return ret;
+    }
+
+
+
+
+</script>
+
+{% endblock %}
