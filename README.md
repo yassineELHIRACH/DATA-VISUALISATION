@@ -6,3 +6,11 @@ Pour le visualiser vous aurez besoin d'un serveur en local (WAMP par exemple), o
 
 ###### Aperçu global
 <img width="939" alt="screenGlobale" src="https://user-images.githubusercontent.com/77837966/114058901-25b2f900-9894-11eb-93b2-63ae23f5c47a.png">
+
+
+###### un menu déroulant 
+
+<img width="940" alt="screenMenu" src="https://user-images.githubusercontent.com/77837966/114059307-88a49000-9894-11eb-96be-00d6005febee.png">
+
+
+###### l'affichage des popups
